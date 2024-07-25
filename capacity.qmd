@@ -75,7 +75,7 @@ statewide_plot <-
         legend.title = element_blank(),
         legend.text = element_text(size=8),
         legend.key.size = unit(.4, "cm"),
-        legend.justification = 2,
+        legend.justification = 1.5,
         legend.key.spacing.x = unit(.05, "cm"),
         panel.grid.minor.x = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
