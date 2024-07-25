@@ -72,11 +72,10 @@ statewide_plot <-
   
   theme_minimal() +
   theme(legend.position = "top",
-        legend.justification = "center",
+        legend.justification = "right",
         legend.title = element_blank(),
         legend.text = element_text(size=8),
         legend.key.size = unit(.4, "cm"),
-        legend.spacing.x = unit(.25, "cm"),
         panel.grid.minor.x = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 
