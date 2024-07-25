@@ -24,7 +24,14 @@ capacity_data <- read.csv("data/working/capacity/capacity_long.csv")
 regional_capacity <- capacity_data %>%
   group_by(year,acep_region,prime_mover) %>%
   summarize(
-    "total_capacity" = sum(capacity, na.rm = TRUE), .groups = "drop")
+    "total_capacity" = sum(capacity, na.rm = TRUE), .groups = "drop") %>%
+   mutate(prime_mover = factor(prime_mover, 
+                                  levels = 
+                                    c("Fossil Turbines","Recip Engines",
+                                          "Hydro","Wind","Utility Solar",
+                                          "Rooftop Solar","Storage",
+                                          "Landfill Gas")),
+             year = as.character(year))
 
 # Function declaration
 source("scripts/inline_functions/capacity_inline_functions.R")
@@ -42,14 +49,8 @@ We begin this section by showcasing the increases in total capacity across the s
 #code for both html and pdf
 statewide_capacity <- regional_capacity %>%
       group_by(year, prime_mover) %>%
-      summarize(statewide_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = 
-                                    c("Fossil Turbines","Recip Engines",
-                                          "Hydro","Wind","Utility Solar",
-                                          "Rooftop Solar","Storage",
-                                          "Landfill Gas")),
-             year = as.character(year))
+      summarize(statewide_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
+
 statewide_plot <-
   ggplot(
     statewide_capacity, 
@@ -109,16 +110,13 @@ print(statewide_pdf)
 For the coastal region, we observe a `r capacity_delta("Coastal")` MW increase in generation capacity (an increase of approximately `r capacity_delta("Coastal", pct=TRUE)` percent) between 2011 and 2021. @fig-capacity-coastal shows the change in total installed capacity for each prime mover in the coastal region. This region saw additions of `r capacity_delta("Coastal", prime_mover = "Fossil Turbines")` MW of fossil turbines, and `r capacity_delta("Coastal", prime_mover = "Recip Engines")` MW of reciprocating engines. The remaining increases were renewable and storage capacity which we look at in more depth in @fig-capacity-coastal-renewable.
 
 ```{r}
-coastal_names <- c("Fossil Turbines", "Recip Engines", "Hydro", "Wind", "Storage")
+coastal_capacity_names <- c("Fossil Turbines", "Recip Engines", "Hydro", "Wind", "Storage")
 
 coastal_capacity <- 
   regional_capacity %>%
-  filter(acep_region == "Coastal", prime_mover %in% coastal_names) %>%
+  filter(acep_region == "Coastal", prime_mover %in% coastal_capacity_names) %>%
   group_by(year, prime_mover) %>%
-      summarize(coastal_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = rev(c("Fossil Turbines", "Recip Engines", "Hydro", "Wind", "Storage"))),
-             year = as.character(year))
+      summarize(coastal_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 coastal_plot <-
   ggplot(
@@ -137,13 +135,13 @@ coastal_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#606571", "#9da7bf", "#00a1b7", "#F79646","#71346a"))) +
+  scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646","#71346a")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -152,10 +150,12 @@ coastal_plot <-
 coastal_html <- 
   coastal_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",coastal_capacity)))
+                                 "<br>Capacity (MW):",coastal_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(coastal_html))
 ```
 
@@ -163,7 +163,7 @@ girafe(code = print(coastal_html))
 coastal_pdf <- 
   coastal_plot +
     
-  geom_col(position = "stack") +
+  geom_col(position = position_stack(reverse = TRUE)) +
   
   ggtitle("Figure 3.2: Coastal Region Capacity")
 
@@ -173,14 +173,13 @@ print(coastal_pdf)
 Across the `r capacity_delta(region = "Coastal", numeric_out = TRUE) - capacity_delta(region = "Coastal", prime_mover = "Fossil Turbines", numeric_out = TRUE) - capacity_delta(region = "Coastal", prime_mover = "Recip Engines", numeric_out = TRUE)` MW of added renewable and storage capacity <!--the remaining capacity expansions-->, hydropower accounted for the bulk of the capacity additions with `r capacity_delta("Coastal", prime_mover = "Hydro")` MW. Storage capacity increased by `r capacity_delta("Coastal", prime_mover = "Storage")` MW and wind generation capacity increased by `r capacity_delta("Coastal", prime_mover = "Wind")` MW. Between 2013 and 2018, significant hydropower additions were made in the Southeast (19.4 MW), Kodiak (11.3 MW), and the Copper-River/Chugach (6.5 MW) AEA energy regions.
 
 ```{r}
+coastal_renewables_names <- c("Hydro", "Wind", "Storage")
+
 coastal_renewable_capacity <- 
   regional_capacity %>%
   filter(acep_region == "Coastal", prime_mover %in% coastal_renewables_names) %>%
   group_by(year, prime_mover) %>%
-      summarize(coastal_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = rev(c("Hydro", "Wind", "Storage"))),
-             year = as.character(year))
+      summarize(coastal_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 coastal_renewable_plot <-
   ggplot(
@@ -199,13 +198,13 @@ coastal_renewable_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#00a1b7", "#F79646","#71346a"))) +
+  scale_fill_manual(values = c("#00a1b7", "#F79646","#71346a")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -214,10 +213,12 @@ coastal_renewable_plot <-
 coastal_renewable_html <- 
   coastal_renewable_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",coastal_renewable_capacity)))
+                                 "<br>Capacity (MW):",coastal_renewable_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(coastal_renewable_html))
 ```
 
@@ -242,10 +243,7 @@ railbelt_capacity <-
   regional_capacity %>%
   filter(acep_region == "Railbelt") %>%
   group_by(year, prime_mover) %>%
-      summarize(railbelt_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = rev(c("Fossil", "Turbines","Recip Engines","Hydro","Wind","Utility Solar","Rooftop Solar","Storage","Landfill", "Gas"))),
-             year = as.character(year))
+      summarize(railbelt_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 railbelt_plot <-
   ggplot(
@@ -264,13 +262,13 @@ railbelt_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#9BBB59","#71346a","#896D09"))) +
+  scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#9BBB59","#71346a","#896D09")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -279,10 +277,12 @@ railbelt_plot <-
 railbelt_html <- 
   railbelt_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",railbelt_capacity)))
+                                 "<br>Capacity (MW):",railbelt_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(railbelt_html))
 ```
 
@@ -290,7 +290,7 @@ girafe(code = print(railbelt_html))
 railbelt_pdf <- 
   railbelt_plot +
     
-  geom_col(position = "stack") +
+  geom_col(position = position_stack(reverse = TRUE)) +
   
   ggtitle("Figure 3.4: Railbelt Region Capacity")
 
@@ -301,16 +301,13 @@ Total renewable and storage capacity in the Railbelt region increased by `r capa
 
 ```{r}
 
-railbelt_renewables_names <- c("Hydro", "Wind", "Utility Solar", "Rooftop Solar", "Storage", "Landfill Gas")
+railbelt_renewable_names <- c("Hydro", "Wind", "Utility Solar", "Rooftop Solar", "Storage", "Landfill Gas")
 
 railbelt_renewable_capacity <- 
   regional_capacity %>%
-  filter(acep_region == "Railbelt", prime_mover %in% railbelt_renewables_names) %>%
+  filter(acep_region == "Railbelt", prime_mover %in% railbelt_renewable_names) %>%
   group_by(year, prime_mover) %>%
-      summarize(railbelt_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = names),
-             year = as.character(year))
+      summarize(railbelt_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 railbelt_renewable_plot <-
   ggplot(
@@ -329,13 +326,13 @@ railbelt_renewable_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#00a1b7", "#F79646","#fad900","#9BBB59","#71346a","#896D09"))) +
+  scale_fill_manual(values = c("#00a1b7", "#F79646","#fad900","#9BBB59","#71346a","#896D09")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -344,10 +341,12 @@ railbelt_renewable_plot <-
 railbelt_renewable_html <- 
   railbelt_renewable_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",railbelt_renewable_capacity)))
+                                 "<br>Capacity (MW):", railbelt_renewable_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(railbelt_renewable_html))
 ```
 
@@ -355,7 +354,7 @@ girafe(code = print(railbelt_renewable_html))
 railbelt_renewable_pdf <- 
   railbelt_renewable_plot +
     
-  geom_col(position = "stack") +
+  geom_col(position = position_stack(reverse = TRUE)) +
   
   ggtitle("Figure 3.5: Railbelt Region Renewable Capacity")
 
@@ -374,10 +373,7 @@ rural_remote_capacity <-
   regional_capacity %>%
   filter(acep_region == "Rural Remote", prime_mover %in% rural_remote_names) %>%
   group_by(year, prime_mover) %>%
-      summarize(rural_remote_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = names),
-             year = as.character(year))
+      summarize(rural_remote_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 rural_remote_plot <-
   ggplot(
@@ -396,13 +392,13 @@ rural_remote_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#71346a"))) +
+  scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#71346a")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -411,10 +407,12 @@ rural_remote_plot <-
 rural_remote_html <- 
   rural_remote_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",rural_remote_capacity)))
+                                 "<br>Capacity (MW):",rural_remote_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(rural_remote_html))
 ```
 
@@ -422,7 +420,7 @@ girafe(code = print(rural_remote_html))
 rural_remote_pdf <- 
   rural_remote_plot +
     
-  geom_col(position = "stack") +
+  geom_col(position = position_stack(reverse = TRUE)) +
   
   ggtitle("Figure 3.6: Rural Remote Region Capacity")
 
@@ -433,16 +431,13 @@ This region saw an absolute increase of `r capacity_delta(region = "Rural Remote
 
 ```{r}
 
-rural_remote_renewables_names <- c("Hydro", "Wind", "Utility Solar","Storage")
+rural_remote_renewable_names <- c("Hydro", "Wind", "Utility Solar","Storage")
 
 rural_remote_renewable_capacity <- 
   regional_capacity %>%
-  filter(acep_region == "Rural Remote", prime_mover %in% rural_remote_renewables_names) %>%
+  filter(acep_region == "Rural Remote", prime_mover %in% rural_remote_renewable_names) %>%
   group_by(year, prime_mover) %>%
-      summarize(rural_remote_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop") %>% 
-      mutate(prime_mover = factor(prime_mover, 
-                                  levels = names),
-             year = as.character(year))
+      summarize(rural_remote_renewable_capacity = sum(total_capacity, na.rm = TRUE), .groups = "drop")
 
 rural_remote_renewable_plot <-
   ggplot(
@@ -461,13 +456,13 @@ rural_remote_renewable_plot <-
     expand = c(0, 0.2)) +
   
     
-  scale_fill_manual(values = rev(c("#00a1b7", "#F79646","#fad900","#71346a"))) +
+  scale_fill_manual(values = c("#00a1b7", "#F79646","#fad900","#71346a")) +
   
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(size=6)) +
-  guides(fill = guide_legend(nrow = 1, reverse = TRUE))
+  guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
@@ -476,10 +471,12 @@ rural_remote_renewable_plot <-
 rural_remote_renewable_html <- 
   rural_remote_renewable_plot +
   
-geom_col_interactive(aes(tooltip = 
+geom_col_interactive(aes(fill = prime_mover,
+                         tooltip = 
                            paste("Year:", year,
                                  "<br>Prime Mover:", prime_mover,
-                                 "<br>Capacity (MW):",rural_remote_renewable_capacity)))
+                                 "<br>Capacity (MW):",rural_remote_renewable_capacity)),
+                     position = position_stack(reverse = TRUE))
 girafe(code = print(rural_remote_renewable_html))
 ```
 
@@ -487,7 +484,7 @@ girafe(code = print(rural_remote_renewable_html))
 rural_remote_renewable_pdf <- 
   rural_remote_renewable_plot +
     
-  geom_col(position = "stack") +
+  geom_col(position = position_stack(reverse = TRUE)) +
   
   ggtitle("Figure 3.7: Railbelt Region Renewable Capacity")
 
