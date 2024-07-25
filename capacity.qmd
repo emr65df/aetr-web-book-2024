@@ -71,9 +71,12 @@ statewide_plot <-
   scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#9BBB59","#71346a","#896D09")) +
   
   theme_minimal() +
-  theme(legend.position = "top", panel.grid.minor.x = element_blank(),
+  theme(legend.position = "top",
+        legend.justification = "right",
         legend.title = element_blank(),
-        legend.text = element_text(size=6)) +
+        legend.text = element_text(size=8),
+        legend.key.size = unit(.5, "cm"),
+        panel.grid.minor.x = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 
 ```
