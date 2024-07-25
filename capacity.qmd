@@ -72,7 +72,7 @@ statewide_plot <-
   
   theme_minimal() +
   theme(legend.position = "top",
-        legend.justification = "right",
+        legend.justification = "center",
         legend.title = element_blank(),
         legend.text = element_text(size=8),
         legend.key.size = unit(.5, "cm"),
