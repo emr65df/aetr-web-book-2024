@@ -75,7 +75,8 @@ statewide_plot <-
         legend.justification = "center",
         legend.title = element_blank(),
         legend.text = element_text(size=8),
-        legend.key.size = unit(.5, "cm"),
+        legend.key.size = unit(.4, "cm"),
+        legend.spacing.x = unit(.25, "cm"),
         panel.grid.minor.x = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 
@@ -196,8 +197,8 @@ coastal_renewable_plot <-
   
   scale_y_continuous(
     name = "Capacity (MW)\n",
-    limits = c(0,500),
-    breaks = seq(0,500, by = 100),
+    limits = c(0,400),
+    breaks = seq(0,400, by = 50),
     expand = c(0, 0.2)) +
   
     
@@ -324,8 +325,8 @@ railbelt_renewable_plot <-
   
   scale_y_continuous(
     name = "Capacity (MW)\n",
-    limits = c(0,500),
-    breaks = seq(0,500, by = 100),
+    limits = c(0,400),
+    breaks = seq(0,400, by = 50),
     expand = c(0, 0.2)) +
   
     
