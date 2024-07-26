@@ -163,10 +163,10 @@ join_shares_2011_2021 <- join_shares %>%
   filter(year %in% c(2011, 2021))
 
 fuel_type_names <- c("Coal", "Oil", "Gas", "Hydro", "Wind", "Solar")
+
 gen_mix_diff <- join_shares_2011_2021 %>%
   mutate(delta = generation_share - lag(generation_share, n = nrow(.)/2)) %>%
-  mutate(delta = round(delta, 2)) %>%
-  filter(year == 2021)  %>%
+  filter(year == 2021) %>%
   mutate(fuel_type = factor(fuel_type, levels = rev(fuel_type_names)))
 
 ```
@@ -174,7 +174,7 @@ gen_mix_diff <- join_shares_2011_2021 %>%
 ```{r}
 regional_changes_plot <- 
 ggplot(gen_mix_diff, 
-       aes(x = round(delta, 2), y = fuel_type, fill = fuel_type)) +
+       aes(x = round(delta,2), y = fuel_type, fill = fuel_type)) +
   
   facet_grid(rows = vars(acep_region)) + 
   
@@ -185,8 +185,7 @@ ggplot(gen_mix_diff,
   
   scale_y_discrete(name = "") +
   
-  
-  scale_fill_manual(values = rev(c("#7f7f7f","#BFBFBF","#DCD9C5","#96B3DF","#F79646","#F5C243")))+ #F5C243
+  scale_fill_manual(values = rev(c("#7f7f7f","#BFBFBF","#DCD9C5","#96B3DF","#F79646","#F5C243"))) +
   theme_minimal() +
   theme(legend.position = "top", panel.grid.minor.x = element_blank(),
         legend.title = element_blank(),
