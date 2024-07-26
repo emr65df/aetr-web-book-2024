@@ -28,7 +28,7 @@ regional_generation_data <- generation_data %>%
     acep_region, year) %>%
   
   summarize(
-    "total_gen" = sum(generation, na.rm = TRUE), .groups = "drop") %>%
+    "total_gen" = sum(generation, na.rm = TRUE)) %>%
   
   mutate(
     total_gen = total_gen / 1000) %>%
@@ -42,7 +42,7 @@ regional_generation_mix <- generation_data %>%
   group_by(acep_region, year, fuel_type) %>%
   
   summarize(
-    generation = sum(generation, na.rm=TRUE), .groups = "drop") %>%
+    generation = sum(generation, na.rm=TRUE)) %>%
   
   filter(
     fuel_type != c("Storage", "Other")) %>%
