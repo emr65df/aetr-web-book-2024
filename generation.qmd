@@ -242,11 +242,13 @@ coastal_shares_plot <-
            fill = fuel_type)) +
 
   scale_x_continuous(name = "\nYear",
-                     breaks = seq(2011, 2021, by = 1)) +
+                     breaks = seq(2011, 2021, by = 1),
+                     expand = c(0,0)) +
   
   scale_y_continuous(name = "Share of Electricity Generation (%)\n",
                    limits = c(0,101),
-                   breaks = seq(0, 100, by = 10)) +
+                   breaks = seq(0, 100, by = 10),
+                   expand = c(0,0)) +
   
   
   scale_fill_manual(values = c("#BFBFBF","#96B3DF","#F79646")) +
