@@ -231,6 +231,54 @@ In 2011, the Coastal region generated `r generation_share("Coastal",2011,"Hydro"
 
 [^4]: Net generation from storage facilities are not included in these calculations.
 
+```{r}
+coastal_shares <- join_shares %>% filter(acep_region == "Coastal",
+                              fuel_type %in% c("Oil", "Hydro", "Wind")) %>%
+                              mutate(fuel_type = factor(fuel_type, levels = c("Oil", "Hydro", "Wind")))
+coastal_shares_plot <- 
+  ggplot(coastal_shares, 
+       aes(x = year, 
+           y = generation_share, 
+           fill = fuel_type)) +
+
+  scale_x_continuous(name = "\nYear",
+                     breaks = seq(2011, 2021, by = 1)) +
+  
+  scale_y_continuous(name = "Share of Electricity Generation (%)\n",
+                   limits = c(0,101),
+                   breaks = seq(0, 100, by = 10)) +
+  
+  
+  scale_fill_manual(values = c("#BFBFBF","#96B3DF","#F79646")) +
+  #theme_minimal() +
+  theme(legend.position = "top",
+        panel.background = element_blank(), 
+        panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(size=6)) +
+  guides(fill = guide_legend(nrow = 1))
+```
+
+```{r, eval=knitr::is_html_output()}
+coastal_shares_html <-
+  coastal_shares_plot +
+  geom_col_interactive(aes(fill = fuel_type, tooltip = paste("Year:", year, 
+                                           "<br>Fuel Type:", fuel_type,
+                                           "<br>Share of Electricity Generation", round(generation_share,2))),
+                       position = position_stack(reverse = TRUE))
+
+girafe(code = print(coastal_shares_html))
+
+```
+
+```{r, eval=knitr::is_latex_output()}
+coastal_shares_pdf <- 
+  coastal_shares_plot +
+  geom_col(position = position_stack(reverse = TRUE))
+
+print(coastal_shares_pdf)
+```
+
 ```{ojs}
 //| label: fig-generation-fuel-coastal
 //| fig-cap: "Share of Net Generation by Fuel Type, Coastal Region"
