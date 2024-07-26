@@ -23,50 +23,48 @@ generation_data <- read.csv(file = "data/working/generation/net_generation_long.
 
 # Regional totals
 regional_generation_data <- generation_data %>%
-  group_by(acep_region, year) %>%
+  
+  group_by(
+    acep_region, year) %>%
+  
   summarize(
-    "total_gen" = sum(generation, na.rm = TRUE, .groups = "drop")
-  ) %>%
+    "total_gen" = sum(generation, na.rm = TRUE), .groups = "drop") %>%
+  
   mutate(
-    total_gen = total_gen / 1000
-  ) %>%
-  mutate(acep_region = factor(acep_region, levels = c("Coastal", "Railbelt", "Rural Remote")))
+    total_gen = total_gen / 1000) %>%
+  
+  mutate(
+    acep_region = factor(acep_region, levels = c("Coastal", "Railbelt", "Rural Remote")))
 
 # Regional generation mixes
 regional_generation_mix <- generation_data %>%
+  
   group_by(acep_region, year, fuel_type) %>%
+  
   summarize(
-    generation = sum(generation, na.rm=TRUE), .groups = "drop"
-  ) %>%
-  filter(fuel_type != c("Storage", "Other")) %>%
-  group_by(acep_region, year) %>%
+    generation = sum(generation, na.rm=TRUE), .groups = "drop") %>%
+  
+  filter(
+    fuel_type != c("Storage", "Other")) %>%
+  
+  group_by(
+    acep_region, year) %>%
+  
   mutate(
-    total_generation = sum(generation,na.rm=TRUE)
-  ) %>%
-  group_by(acep_region,year,fuel_type) %>%
+    total_generation = sum(generation,na.rm=TRUE)) %>%
+  
+  group_by(
+    acep_region,year,fuel_type) %>%
+  
   mutate(
-    gen_share = ((generation / total_generation)*100)
-  ) %>%
-  mutate(acep_region = factor(acep_region, levels = c("Coastal", "Railbelt", "Rural Remote")))
+    gen_share = ((generation / total_generation)*100)) %>%
+  
+  mutate(
+    acep_region = factor(acep_region, 
+                         levels = c("Coastal", "Railbelt", "Rural Remote")))
 
 # Function declarations
 source("scripts/inline_functions/generation_inline_functions.R")
-```
-
-```{ojs}
-//| echo: false
-import {tidy, groupBy, rename, summarize, sum, mutate, select, n, nDistinct, mean, filter, pivotWider, pivotLonger, leftJoin, slice, fullJoin, lag, TMath, rowNumber,mutateWithSummary} from "@pbeshai/tidyjs"
-
-// Import the long-form generation data
-gen_data = FileAttachment("data/working/generation/net_generation_long.csv").csv({ typed: true })
-
-// Convert MWh to GWh
-gen_data_gwh = tidy(gen_data, mutate({
-  generation: (d) => d.generation / 1000
-})).map((d) => ({...d, "Fuel Type": d.fuel_type})).map((d) => ({...d, "ACEP Region": d.acep_region}));
-
-//gen_data_gwh = gen_data_gwh_.map((d) => ({...d, "ACEP Region": d.acep_region},{...d, "Fuel Type": d.fuel_type}))
-
 ```
 
 ## General Overview {#sec-generation}
