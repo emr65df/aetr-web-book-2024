@@ -86,23 +86,24 @@ regional_generation_plot <-
       y = total_gen,
       fill = acep_region)) +
 
-  scale_x_discrete(name = "\nYear") +
+  scale_x_continuous(name = "\nYear",
+                   breaks = seq(2011, 2021, by = 1),
+    expand = c(0, 0)) +
   
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,7000),
     breaks = seq(0,7000, by = 500),
-    expand = c(0, 0.2)) +
+    expand = c(0, 0)) +
   
     
   scale_fill_manual(values = c("#8cbbda","#97cd93","#f28d8c")) +
   
-  theme_minimal() +
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.background = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
