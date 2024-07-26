@@ -64,19 +64,22 @@ statewide_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,3500),
-    breaks = seq(0,3500, by = 500),
+    breaks = seq(0,3000, by = 500),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#9BBB59","#71346a","#896D09")) +
+  theme_bw() +
   
-  theme_minimal() +
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 
 ```
@@ -134,20 +137,23 @@ coastal_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,700),
-    breaks = seq(0,700, by = 50),
+    breaks = seq(0,650, by = 50),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646","#71346a")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -200,21 +206,24 @@ coastal_renewable_plot <-
   
   scale_y_continuous(
     name = "Capacity (MW)\n",
-    limits = c(0,400),
-    breaks = seq(0,400, by = 50),
+    limits = c(0,350),
+    breaks = seq(0,300, by = 50),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#00a1b7", "#F79646","#71346a")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -269,20 +278,23 @@ railbelt_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,2500),
-    breaks = seq(0,2500, by = 250),
+    breaks = seq(0,2000, by = 250),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#9BBB59","#71346a","#896D09")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -337,20 +349,23 @@ railbelt_renewable_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,400),
-    breaks = seq(0,400, by = 50),
+    breaks = seq(0,350, by = 50),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#00a1b7", "#F79646","#fad900","#9BBB59","#71346a","#896D09")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -407,20 +422,23 @@ rural_remote_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,400),
-    breaks = seq(0,400, by = 50),
+    breaks = seq(0,300, by = 50),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#606571", "#9da7bf", "#00a1b7", "#F79646", "#fad900","#71346a")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -475,20 +493,23 @@ rural_remote_renewable_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,24),
-    breaks = seq(0,24, by = 2),
+    breaks = seq(0,22, by = 2),
     expand = c(0, 0.2)) +
   
     
   scale_fill_manual(values = c("#00a1b7", "#F79646","#fad900","#71346a")) +
   
-  theme_minimal() +
+  theme_bw() +
   
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
         legend.key.spacing.x = unit(.05, "cm"),
-        panel.grid.minor.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
