@@ -93,17 +93,21 @@ regional_generation_plot <-
   scale_y_continuous(
     name = "Capacity (MW)\n",
     limits = c(0,7000),
-    breaks = seq(0,7000, by = 500),
+    breaks = seq(0,6500, by = 500),
     expand = c(0, 0)) +
   
     
   scale_fill_manual(values = c("#8cbbda","#97cd93","#f28d8c")) +
   
+  theme_bw() +
   theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=7),
         legend.key.size = unit(.4, "cm"),
-        panel.background = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank()) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
@@ -175,7 +179,7 @@ gen_mix_diff <- join_shares_2011_2021 %>%
 ```{r}
 regional_changes_plot <- 
 ggplot(gen_mix_diff, 
-       aes(x = round(delta,2), y = fuel_type, fill = fuel_type)) +
+       aes(x = delta, y = fuel_type, fill = fuel_type)) +
   
   facet_grid(rows = vars(acep_region)) + 
   
@@ -187,11 +191,14 @@ ggplot(gen_mix_diff,
   scale_y_discrete(name = "") +
   
   scale_fill_manual(values = rev(c("#7f7f7f","#BFBFBF","#DCD9C5","#96B3DF","#F79646","#F5C243"))) +
-  theme_minimal() +
-  theme(legend.position = "top", panel.grid.minor.x = element_blank(),
+  theme_bw() +
+  theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size=6),
+        strip.background = element_blank(),
         strip.text.y.right = element_text(angle = 0),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA)) +
   guides(fill = guide_legend(nrow = 1, reverse = TRUE))
 
@@ -205,7 +212,7 @@ regional_changes_html <-
   
 geom_col_interactive(aes(fill = fuel_type,
                          tooltip = 
-                           paste("Percentage Point Change:", delta,
+                           paste("Percentage Point Change:", round(delta,2),
                                  "<br>Fuel Type:",fuel_type)))
 girafe(code = print(regional_changes_html))
 
