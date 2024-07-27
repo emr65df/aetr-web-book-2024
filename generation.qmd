@@ -284,7 +284,7 @@ girafe(code = print(coastal_shares_html))
 
 ```
 
-```{r, eval=knitr::is_latex_output(), fig.cap="Note: Storage is not included here due since net generation is negative."}
+```{r, eval=knitr::is_latex_output()}
 coastal_shares_pdf <- 
   coastal_shares_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
