@@ -142,9 +142,6 @@ While generation did not change significantly during the observed time period, t
 [^3]: Oil consists of generators whose primary fuel source is diesel/distillate, naphtha, or jet fuel. Gas consists of natural or landfill gas. Hydro refers to conventional hydroelectric turbines. Wind and solar are both utility-scale (excluding behind-the-meter solar). Storage is not included in these calculations.
 
 ```{r}
-#Establish the figure caption for generation mix charts
-caption_gen_mix = "Note: Storage is not included here due since net generation is negative."
-
 #Creating a modified version of the data
 share_data <- generation_data %>%
   group_by(year, acep_region, fuel_type) %>%
@@ -261,15 +258,19 @@ coastal_shares_plot <-
   
   scale_fill_manual(values = c("#BFBFBF","#96B3DF","#F79646")) +
   #theme_minimal() +
+  labs(caption ="Note: Storage is not included here since net generation is negative.") +
   theme(legend.position = "top",
         panel.background = element_blank(), 
         panel.grid = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(size=6)) +
+        legend.text = element_text(size=6),
+        plot.caption = element_text(hjust = 0.5, colour = "gray65")) +
   guides(fill = guide_legend(nrow = 1))
 ```
 
 ```{r, eval=knitr::is_html_output()}
+#| label: fig-generation-fuel-coastal
+#| fig-cap: "Share of Net Generation by Fuel Type, Coastal Region"
 coastal_shares_html <-
   coastal_shares_plot +
   geom_col_interactive(aes(fill = fuel_type, tooltip = paste("Year:", year, 
