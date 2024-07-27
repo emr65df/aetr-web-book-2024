@@ -188,6 +188,7 @@ ggplot(gen_mix_diff,
   scale_y_discrete(name = "") +
   
   scale_fill_manual(values = rev(c("#7f7f7f","#BFBFBF","#DCD9C5","#96B3DF","#F79646","#F5C243"))) +
+  labs(caption = "Percentage point differences in generation mix between 2021 and 2011") +
   theme_bw() +
   theme(legend.position = "top",
         legend.title = element_blank(),
@@ -196,7 +197,8 @@ ggplot(gen_mix_diff,
         strip.text.y.right = element_text(angle = 0),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        panel.border = element_rect(color = "black", fill = NA)) +
+        panel.border = element_rect(color = "black", fill = NA),
+        plot.caption = element_text(hjust = 0.5, colour = "gray65")) +
   guides(fill = guide_legend(nrow = 1, reverse = TRUE))
 
 ```
