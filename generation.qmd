@@ -490,9 +490,10 @@ print(railbelt_generation_gwh_pdf)
 The Rural Remote region has seen notable changes between 2011 and 2021 in how it generates electricity. In 2011, the region generated `r generation_share("Rural Remote",2011,"Oil")`% of electricity from oil, `r generation_share("Rural Remote",2011,"Gas")`% from gas, `r generation_share("Rural Remote",2011,"Hydro")`% from hydro, and `r generation_share("Rural Remote",2011,"Wind")`% from wind. In 2021, the region generated `r generation_share("Rural Remote",2021,"Oil")`% of electricity from oil (mostly diesel), `r generation_share("Rural Remote",2021,"Gas")`% from gas, `r generation_share("Rural Remote",2021,"Hydro")`% from hydro, and `r generation_share("Rural Remote",2021,"Wind")`% from wind. Additionally, a small amount of solar generation was present. @fig-generation-fuel-rural shows how this generation mix has changed over the years.
 
 ```{r}
-rural_remote_shares <- join_shares %>% filter(acep_region == "Rural Remote",
-                              fuel_type %in% c("Oil", "Gas", "Hydro", "Wind", "Solar", "Other")) %>%
-                              mutate(fuel_type = factor(fuel_type, levels = c("Oil", "Gas", "Hydro", "Wind", "Solar", "Other")))
+rural_remote_shares <- join %>% filter(acep_region == "Rural Remote",
+                              fuel_type %in% c("Oil", "Gas", "Hydro", "Wind", "Solar", "Other")) %>% 
+  mutate(generation_share = generation/total_generation*100,
+fuel_type = factor(fuel_type, levels = c("Oil", "Gas", "Hydro", "Wind", "Solar", "Other")))
 
 rural_remote_shares_plot <- 
   ggplot(rural_remote_shares, 
