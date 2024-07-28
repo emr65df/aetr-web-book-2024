@@ -547,55 +547,6 @@ rural_remote_shares_pdf <-
 print(rural_remote_shares_pdf)
 ```
 
-```{ojs}
-//| label: fig-generation-fuel-rural
-//| fig-cap: "Share of Net Generation by Fuel Type, Rural Remote Region"
-
-// Plotting the shares for the coastal region
-Plot.plot({
-
-  // Configure the plot
-  //title: "Share of net generation by fuel type, Rural Remote region",
-  caption: caption_gen_mix,
-  insetLeft: 0,
-  insetRight: 0,
-  width: width,
-  
-  // Configure the x-axis
-  x: {
-    tickFormat: "d",
-    label: "Year"
-  },
-  
-  // Configure the y-axis
-  y: {
-    grid: true,
-    label: "Share of electricity generation"
-  },
-  
-  marks: [
-    Plot.areaY(
-      join_shares.filter((d) => d.acep_region === "Rural Remote"),
-      {
-        x:"year",
-        y:"generation_share", 
-        fill: "Fuel Type",
-        order: ["Oil","Gas","Hydro","Wind","Solar","Other"],
-        tip: {format: {x: "d", y: (d) => `${(d).toLocaleString(undefined, {maximumFractionDigits: 2})}%`}}
-      }
-    ),
-    Plot.ruleY([0])
-  ],
-  
-  // Legend
-  color: {
-    domain: ["Oil","Gas","Hydro","Wind","Solar","Other"],
-    range: ["#BFBFBF","#DCD9C5","#96B3DF","#F79646","#F5C243","#C0504D"],
-    legend: true
-}
-})
-```
-
 Generation from 2011 to 2021 saw an average annual growth rate of `r cagr("Rural Remote")`%. @fig-generation-rural highlights the yearly trends in generation by fuel source. From 2013 to 2014, a large increase in gas generation is observed due to operations on the North Slope - specifically in the Barrow Utilities & Electric Cooperative, Inc. (BUECI), Deadhorse, and Nuiqsut service regions.
 
 ```{ojs}
