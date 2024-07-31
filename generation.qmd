@@ -97,7 +97,7 @@ regional_generation_plot <-
     expand = c(0, 0)) +
   
   scale_y_continuous(
-    name = "Capacity (MW)\n",
+    name = "Generation (GWh)\n",
     limits = c(0,7000),
     breaks = seq(0,6500, by = 500),
     expand = c(0, 0)) +
@@ -127,7 +127,7 @@ geom_col_interactive(aes(fill = acep_region,
                          tooltip = 
                            paste("Year:", year,
                                  "<br>ACEP Region", acep_region,
-                                 "<br>Generation (GWh):",total_gen)),
+                                 "<br>Generation (GWh):", round(total_gen, 2))),
                      position = position_stack(reverse = TRUE))
 girafe(code = print(regional_generation_html))
 ```
@@ -360,7 +360,7 @@ girafe(code = print(coastal_generation_gwh_html))
 coastal_generation_gwh_pdf <- 
   coastal_generation_gwh_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
-  ggtitle("Figure 4.4: Figure 4.4: Electricity Generation, Coastal Region")
+  ggtitle("Figure 4.4: Electricity Generation, Coastal Region")
 
 print(coastal_generation_gwh_pdf)
 ```
@@ -422,7 +422,7 @@ girafe(code = print(railbelt_shares_html))
 railbelt_shares_pdf <- 
   railbelt_shares_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
-  ggtitle("Figure 4.3: Share of Net Generation by Fuel Type, Railbelt Region")
+  ggtitle("Figure 4.5: Share of Net Generation by Fuel Type, Railbelt Region")
 
 print(railbelt_shares_pdf)
 ```
@@ -444,7 +444,7 @@ railbelt_generation_gwh_plot <-
                      expand = c(0,0)) +
   
   scale_y_continuous(name = "Generation (GWh)\n",
-                   limits = c(0,5200),
+                   limits = c(0,5500),
                    breaks = seq(0, 5000, by = 500),
                    expand = c(0,0)) +
   
@@ -482,7 +482,7 @@ girafe(code = print(railbelt_generation_gwh_html))
 railbelt_generation_gwh_pdf <- 
   railbelt_generation_gwh_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
-  ggtitle("Figure 4.4: Figure 4.4: Electricity Generation, Railbelt Region")
+  ggtitle("Figure 4.6: Electricity Generation, Railbelt Region")
 
 print(railbelt_generation_gwh_pdf)
 ```
@@ -544,7 +544,7 @@ girafe(code = print(rural_remote_shares_html))
 rural_remote_shares_pdf <- 
   rural_remote_shares_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
-  ggtitle("Figure 4.3: Share of Net Generation by Fuel Type, Rural Remote Region")
+  ggtitle("Figure 4.7: Share of Net Generation by Fuel Type, Rural Remote Region")
 
 print(rural_remote_shares_pdf)
 ```
@@ -591,7 +591,7 @@ rural_remote_generation_gwh_plot <-
 ```
 
 ```{r, eval=knitr::is_html_output()}
-#| label: fig-generation-rural-remote
+#| label: fig-generation-rural
 #| fig-cap: "Electricity Generation, Rural Remote Region"
 rural_remote_generation_gwh_html <-
   rural_remote_generation_gwh_plot +
@@ -608,7 +608,7 @@ girafe(code = print(rural_remote_generation_gwh_html))
 rural_remote_generation_gwh_pdf <- 
   rural_remote_generation_gwh_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
-  ggtitle("Figure 4.4: Figure 4.4: Electricity Generation, Rural Remote Region")
+  ggtitle("Figure 4.8: Electricity Generation, Rural Remote Region")
 
 print(rural_remote_generation_gwh_pdf)
 ```
