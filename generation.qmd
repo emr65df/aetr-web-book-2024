@@ -97,7 +97,7 @@ regional_generation_plot <-
     expand = c(0, 0)) +
   
   scale_y_continuous(
-    name = "Capacity (MW)\n",
+    name = "Generation (GWh)\n",
     limits = c(0,7000),
     breaks = seq(0,6500, by = 500),
     expand = c(0, 0)) +
@@ -127,7 +127,7 @@ geom_col_interactive(aes(fill = acep_region,
                          tooltip = 
                            paste("Year:", year,
                                  "<br>ACEP Region", acep_region,
-                                 "<br>Generation (GWh):",total_gen)),
+                                 "<br>Generation (GWh):", round(total_gen, 2))),
                      position = position_stack(reverse = TRUE))
 girafe(code = print(regional_generation_html))
 ```
