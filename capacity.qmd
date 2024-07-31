@@ -19,7 +19,7 @@ library(ggplot2)
 library(ggiraph)
 
 # Import the data
-capacity_data <- read.csv("data/working/capacity/capacity_long.csv")
+capacity_data <- read.csv("data/final_data/capacity.csv")
 
 regional_capacity <- capacity_data %>%
   group_by(year,acep_region,prime_mover) %>%
@@ -540,6 +540,6 @@ print(rural_remote_renewable_pdf)
 ```
 
 ```{ojs}
-original_cap_data = FileAttachment("data/working/capacity/capacity_long.csv").csv({ typed: true })
+original_cap_data = FileAttachment("data/final_data/capacity.csv").csv({ typed: true })
 cap_data = original_cap_data.map((d) => ({...d, "Prime Mover": d.prime_mover}))
 ```
