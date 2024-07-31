@@ -444,7 +444,7 @@ railbelt_generation_gwh_plot <-
                      expand = c(0,0)) +
   
   scale_y_continuous(name = "Generation (GWh)\n",
-                   limits = c(0,5200),
+                   limits = c(0,5500),
                    breaks = seq(0, 5000, by = 500),
                    expand = c(0,0)) +
   
