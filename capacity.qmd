@@ -538,8 +538,3 @@ rural_remote_renewable_pdf <-
 
 print(rural_remote_renewable_pdf)
 ```
-
-```{ojs}
-original_cap_data = FileAttachment("data/final_data/capacity.csv").csv({ typed: true })
-cap_data = original_cap_data.map((d) => ({...d, "Prime Mover": d.prime_mover}))
-```
